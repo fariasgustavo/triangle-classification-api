@@ -9,9 +9,20 @@ export const triangleType = (triangle: Triangle): TriangleType => {
   if (isEquilateral(triangleValues))
     return { classification: TriangleClassification.EQUILATERAL };
 
-  return { classification: TriangleClassification.SCALENE };
+  if (isScalene(triangleValues))
+    return { classification: TriangleClassification.SCALENE };
+
+  return { classification: TriangleClassification.ISOSCELES };
 };
 
 const isEquilateral = (triangleValues: number[]): boolean => {
   return triangleValues.every((value) => value === triangleValues[0]);
+};
+
+const isScalene = (triangleValues: number[]): boolean => {
+  const uniqueTriangleValues = new Set(triangleValues);
+
+  if (uniqueTriangleValues.size === triangleValues.length) return true;
+
+  return false;
 };
