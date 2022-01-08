@@ -30,4 +30,17 @@ describe('Triangle type use case', () => {
       classification: TriangleClassification.SCALENE,
     });
   });
+
+  it("Given a triangle that has at least two sides the same length, should return classification: 'isosceles'", () => {
+    const params: Triangle = {
+      a: 10,
+      b: 10,
+      c: 15,
+    };
+    const result: TriangleType = triangleType(params);
+
+    expect(result).toStrictEqual({
+      classification: TriangleClassification.ISOSCELES,
+    });
+  });
 });
