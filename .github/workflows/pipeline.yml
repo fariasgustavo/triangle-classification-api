@@ -1,0 +1,13 @@
+name: GitHub Actions Demo
+on: [push]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Starting unit tests execution on ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          node-version: '14.17.5'
+      - run: npm install
+      - run: npm run test
