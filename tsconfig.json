@@ -20,6 +20,7 @@
     "baseUrl": "./",
     "paths": {
       "@src/*": ["./src/*"],
+      "@cdk/*": ["./cdk/*"],
       "@test/*": ["./test/*"]
     },
     "rootDirs": [
@@ -32,7 +33,7 @@
   "include": [
     "./src/**/*.ts",
     "./test/**/*.ts"
-  ],
+, "src/presenters/triangle.ts"  ],
   "exclude": [
     "./node_modules/*",
     "dist"

@@ -5,12 +5,12 @@ export interface AuthSecretManager {
 }
 
 export default class ClientSecretManager implements AuthSecretManager {
-  async getSecretByID<T>(secretID: string): Promise<T> {
+  async getSecretByID<T>(secretID = ''): Promise<T> {
     const awsSecretManager = new SecretsManager({
       apiVersion: '2017-10-17',
       credentials: {
-        accessKeyId: process.env.AWS_ACCESS_KEY,
-        secretAccessKey: process.env.AWS_SECRET_KEY,
+        accessKeyId: process.env.AWS_ACCESS_KEY || '',
+        secretAccessKey: process.env.AWS_SECRET_KEY || '',
       },
       region: process.env.AWS_REGION,
     });
@@ -18,6 +18,6 @@ export default class ClientSecretManager implements AuthSecretManager {
       .getSecretValue({ SecretId: secretID })
       .promise();
 
-    return JSON.parse(SecretString);
+    return JSON.parse(SecretString || '');
   }
 }
