@@ -7,6 +7,7 @@
     "start:dev": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts",
     "build": "rm -rf dist && tsc",
     "deploy": "npm run build && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
+    "local": "rm -rf cdk.out && npm run build && cdk bootstrap aws://963984205706/us-east-1 && sam local start-api -t ./cdk.out/GatewayRestService.template.json",
     "test": "jest"
   },
   "keywords": [
