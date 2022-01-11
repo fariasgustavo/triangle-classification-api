@@ -4,6 +4,7 @@ jobs:
   unit-tests:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Starting unit tests execution on ${{ github.event_name }} event."
       - name: Check out repository code
         uses: actions/checkout@v2
         with:
@@ -17,6 +18,7 @@ jobs:
   deploy-aws-cdk:
     runs-on: ubuntu-latest
     steps:
+      - run: echo "Starting AWS CDK deploy"
       - name: Check out repository code
         uses: actions/checkout@v2
 
