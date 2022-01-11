@@ -27,7 +27,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1
+          aws-region: ${{ secrets.AWS_REGION }}
 
       - name: Install NPM
         run: sudo apt update -y && sudo apt install nodejs npm -y
@@ -42,7 +42,7 @@ jobs:
         run: npm run build
 
       - name: CDK Bootstrap
-        run: cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_NUMBER }}/us-east-1
+        run: cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_NUMBER }}/${{ secrets.AWS_REGION }}
 
       - name: CDK Deploy
         run: cdk deploy
