@@ -23,7 +23,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Echo Environment
-        run: echo ${{ secrets.AWS_REGION }}
+        run: echo ${{ secrets.AWS_ACCESS_KEY_ID }}
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v1
