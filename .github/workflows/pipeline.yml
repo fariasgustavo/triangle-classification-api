@@ -1,4 +1,4 @@
-name: GitHub Actions Demo
+name: Triangle Classification
 on: [push]
 jobs:
   unit-tests:
