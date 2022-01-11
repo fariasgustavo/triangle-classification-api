@@ -5,7 +5,8 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts",
-    "deploy": "rm -rf dist && tsc && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
+    "build": "rm -rf dist && tsc",
+    "deploy": "npm run build && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
     "test": "jest"
   },
   "keywords": [
