@@ -38,11 +38,11 @@ jobs:
       - name: Install AWS CDK
         run: sudo npm install -g aws-cdk
 
-      - name: CDK Synth
-        run: cdk synth
-
       - name: Code Build
         run: npm run build
+
+      - name: CDK Synth
+        run: cdk synth
 
       - name: CDK Bootstrap
         run: cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_NUMBER }}/${{ secrets.AWS_REGION }}
