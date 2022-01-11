@@ -49,3 +49,5 @@ jobs:
 
       - name: CDK Deploy
         run: cdk deploy
+
+    needs: unit-tests
