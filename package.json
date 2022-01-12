@@ -5,9 +5,9 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts",
-    "build": "rm -rf dist && tsc",
+    "build": "npx rimraf dist && tsc",
     "deploy": "npm run build && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
-    "local": "rm -rf cdk.out && npm run build && cdk bootstrap aws://963984205706/us-east-1 && sam local start-api -t ./cdk.out/GatewayRestService.template.json",
+    "local": "npx rimraf cdk.out && npm run build && cdk bootstrap aws://963984205706/us-east-1 && sam local start-api -t ./cdk.out/GatewayRestService.template.json",
     "test": "jest"
   },
   "keywords": [
@@ -25,6 +25,7 @@
     "aws-lambda": "^1.0.7",
     "constructs": "^10.0.0",
     "dotenv": "^10.0.0",
+    "dynamoose": "^2.8.3",
     "jsonwebtoken": "^8.5.1",
     "source-map-support": "^0.5.16"
   },
