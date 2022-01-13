@@ -9,13 +9,13 @@ import Triangle from '../domain/entities/triangle.entity';
 export const classification = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  console.info(currentDateToString());
+  console.info('event: ', event);
   try {
     const { body } = event;
 
     if (!body)
       return {
-        body: JSON.stringify([{ message: 'Hello AWS CDK' }]),
+        body: JSON.stringify([{ message: 'Invalid Request' }]),
         statusCode: 400,
       };
 
