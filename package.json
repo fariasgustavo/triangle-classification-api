@@ -4,6 +4,10 @@
   "description": "An API to determine if a triangle is equilateral, isosceles, or scalene.",
   "main": "./src/index.ts",
   "scripts": {
+    "start:dev": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts",
+    "build": "npx rimraf build && tsc",
+    "deploy": "npm run build && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
+    "local": "npx rimraf cdk.out && npm run build && cdk bootstrap aws://963984205706/us-east-1 && sam local start-api -t ./cdk.out/GatewayRestService.template.json",
     "test": "jest"
   },
   "keywords": [
@@ -15,19 +19,35 @@
   ],
   "author": "Gustavo Farias",
   "license": "ISC",
+  "dependencies": {
+    "@aws-cdk/aws-dynamodb": "^1.138.2",
+    "aws-cdk-lib": "2.5.0",
+    "aws-lambda": "^1.0.7",
+    "constructs": "^10.0.0",
+    "dotenv": "^10.0.0",
+    "dynamoose": "^2.8.3",
+    "jsonwebtoken": "^8.5.1",
+    "source-map-support": "^0.5.16"
+  },
   "devDependencies": {
+    "@types/aws-lambda": "^8.10.89",
     "@types/jest": "^27.0.3",
     "@types/jsonwebtoken": "^8.5.6",
     "@types/node": "16",
     "@typescript-eslint/eslint-plugin": "^5.8.1",
     "@typescript-eslint/parser": "^5.8.1",
+    "aws-cdk": "2.5.0",
+    "aws-sdk": "^2.1053.0",
+    "aws-sdk-mock": "^5.5.1",
+    "dotenv-cli": "^4.1.1",
     "eslint": "^8.5.0",
+    "jest": "^27.4.5",
+    "nock": "^13.2.1",
     "prettier": "^2.5.1",
     "supertest": "^6.1.6",
     "ts-jest": "^27.1.2",
+    "ts-node": "^9.0.0",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.4",
-    "jest": "^27.4.5",
-    "nock": "^13.2.1"
+    "typescript": "^4.5.4"
   }
 }
