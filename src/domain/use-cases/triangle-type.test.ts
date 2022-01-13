@@ -1,8 +1,8 @@
-import { triangleType } from '@src/domain/use-cases/triangle-type';
 import TriangleType, {
   TriangleClassification,
-} from '@src/domain/entities/triangle-type.entity';
-import Triangle from '@src/domain/entities/triangle.entity';
+} from '../entities/triangle-type.entity';
+import Triangle from '../entities/triangle.entity';
+import triangleType from './triangle-type';
 
 describe('Triangle type use case', () => {
   it("Given a triangle that has all three sides the same length, should return classification: 'equilateral'", () => {

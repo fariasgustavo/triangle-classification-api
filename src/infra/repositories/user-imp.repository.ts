@@ -1,6 +1,6 @@
-import User from '@src/domain/entities/user.entity';
-import UserRepository from '@src/domain/repositories/user.repository';
-import UserModel from '@src/infra/data/models/user.model';
+import User from '../../domain/entities/user.entity';
+import UserRepository from '../../domain/repositories/user.repository';
+import UserModel from '../../infra/data/models/user.model';
 
 export default class UserRepositoryImp implements UserRepository {
   constructor(private readonly userModel: typeof UserModel) {}

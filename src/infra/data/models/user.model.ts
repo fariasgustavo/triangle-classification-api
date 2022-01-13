@@ -1,4 +1,4 @@
-import DatabaseConnectionImp from '@src/infra/database/database-connection-imp';
+import DatabaseConnectionImp from '../../database/database-connection-imp';
 
 const database = new DatabaseConnectionImp();
 const dynamoDb = database.connection();

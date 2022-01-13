@@ -5,7 +5,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "dotenv -e .env -- ts-node-dev --transpile-only src/index.ts",
-    "build": "npx rimraf dist && tsc",
+    "build": "npx rimraf build && tsc",
     "deploy": "npm run build && cdk bootstrap aws://963984205706/us-east-1 && cdk deploy",
     "local": "npx rimraf cdk.out && npm run build && cdk bootstrap aws://963984205706/us-east-1 && sam local start-api -t ./cdk.out/GatewayRestService.template.json",
     "test": "jest"
