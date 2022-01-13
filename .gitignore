@@ -1,6 +1,6 @@
 # compiled output
 /node_modules
-/dist
+/build
 
 # OS
 .DS_Store
@@ -11,3 +11,7 @@
 
 
 .env
+
+# CDK asset staging directory
+.cdk.staging
+cdk.out

@@ -1,0 +1,53 @@
+name: Triangle Classification
+on: [push]
+jobs:
+  unit-tests:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Starting unit tests execution on ${{ github.event_name }} event."
+      - name: Check out repository code
+        uses: actions/checkout@v2
+        with:
+          node-version: '14.17.5'
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Run Unit Tests
+        run: npm run test
+  deploy-aws-cdk:
+    runs-on: ubuntu-latest
+    steps:
+      - run: echo "Starting AWS CDK deploy"
+      - name: Check out repository code
+        uses: actions/checkout@v2
+
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ secrets.AWS_REGION }}
+
+      - name: Install NPM
+        run: sudo apt update -y && sudo apt install nodejs npm -y
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Install AWS CDK
+        run: sudo npm install -g aws-cdk
+
+      - name: Code Build
+        run: npm run build
+
+      - name: CDK Synth
+        run: cdk synth
+
+      - name: CDK Bootstrap
+        run: cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_NUMBER }}/${{ secrets.AWS_REGION }}
+
+      - name: CDK Deploy
+        run: cdk deploy
+
+    needs: unit-tests
