@@ -4,6 +4,7 @@ import * as lambda from 'aws-cdk-lib/aws-lambda';
 import * as dynamodb from 'aws-cdk-lib/aws-dynamodb';
 import * as path from 'path';
 import { Stack, StackProps } from 'aws-cdk-lib';
+import { JsonSchemaType, JsonSchemaVersion } from 'aws-cdk-lib/aws-apigateway';
 
 export default class GatewayRestService extends Stack {
   constructor(scope: Construct, id: string, props?: StackProps) {
@@ -18,7 +19,7 @@ export default class GatewayRestService extends Stack {
     const handler = new lambda.Function(this, 'Triangle Classification', {
       runtime: lambda.Runtime.NODEJS_14_X,
       code: lambda.Code.fromAsset(
-        path.join(__dirname, '/../../dist/presenters')
+        path.join(__dirname, '/../../build/presenters')
       ),
       handler: 'triangle.classification',
     });
@@ -38,12 +39,41 @@ export default class GatewayRestService extends Stack {
       },
     });
 
-    const getWidgetsIntegration = new apigateway.LambdaIntegration(handler, {
+    const apiLambdaIntegration = new apigateway.LambdaIntegration(handler, {
       requestTemplates: { 'application/json': '{ "statusCode": "200" }' },
     });
 
     const triangleClassification = api.root.addResource('classification');
+    const triangleClassificationRequestValidatorModel = api.addModel(
+      'TriangleClassificationValidatorModel',
+      {
+        contentType: 'application/json',
+        modelName: 'TriangleClassificationValidatorModel',
+        schema: {
+          schema: JsonSchemaVersion.DRAFT4,
+          title: 'TriangleClassificationValidatorModelSchema',
+          type: JsonSchemaType.OBJECT,
+          properties: {
+            a: { type: JsonSchemaType.NUMBER },
+            b: { type: JsonSchemaType.NUMBER },
+            c: { type: JsonSchemaType.NUMBER },
+          },
+          required: ['a', 'b', 'c'],
+        },
+      }
+    );
+    const triangleClassificationRequestValidator = api.addRequestValidator(
+      'TriangleClassificationValidator',
+      {
+        validateRequestBody: true,
+      }
+    );
 
-    triangleClassification.addMethod('POST', getWidgetsIntegration);
+    triangleClassification.addMethod('POST', apiLambdaIntegration, {
+      requestModels: {
+        'application/json': triangleClassificationRequestValidatorModel,
+      },
+      requestValidator: triangleClassificationRequestValidator,
+    });
   }
 }

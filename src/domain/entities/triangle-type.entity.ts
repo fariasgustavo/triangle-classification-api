@@ -5,5 +5,5 @@ export enum TriangleClassification {
 }
 
 export default interface TriangleType {
-  classification: TriangleClassification;
+  readonly classification: TriangleClassification;
 }

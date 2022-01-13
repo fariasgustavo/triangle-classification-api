@@ -1,7 +1,7 @@
-import Triangle from '@src/domain/entities/triangle.entity';
+import Triangle from '../entities/triangle.entity';
 import TriangleType, {
   TriangleClassification,
-} from '@src/domain/entities/triangle-type.entity';
+} from '../entities/triangle-type.entity';
 
 const isEquilateral = (triangleValues: number[]): boolean => {
   return triangleValues.every((value) => value === triangleValues[0]);
@@ -20,7 +20,7 @@ const isScalene = (triangleValues: number[]): boolean => {
  * @param triangle - an object that contains the traiangle's three sides
  * @returns triangle classification type (EQUILATERAL, SCALENE or ISOSCELES)
  */
-export const triangleType = (triangle: Triangle): TriangleType => {
+export default function triangleType(triangle: Triangle): TriangleType {
   const triangleValues: number[] = Object.values(triangle);
 
   if (isEquilateral(triangleValues))
@@ -30,4 +30,4 @@ export const triangleType = (triangle: Triangle): TriangleType => {
     return { classification: TriangleClassification.SCALENE };
 
   return { classification: TriangleClassification.ISOSCELES };
-};
+}
