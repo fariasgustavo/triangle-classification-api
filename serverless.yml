@@ -1,0 +1,109 @@
+service: toro-user-position-api
+frameworkVersion: '>=2.33.1'
+custom: ${file(stages.yml):${opt:stage, self:provider.stage}}
+
+provider:
+    name: aws
+    runtime: nodejs14.x
+    lambdaHashingVersion: '20201221'
+    stage: ${opt:stage, 'local'}
+    region: ${self:custom.region}
+    environment:
+        TOKEN_SECRET_ID: ${self:custom.environment.TOKEN_SECRET_ID}
+        USER_POSITION_TABLE: ${self:custom.database.triangleHistory}
+        REGION: ${self:custom.region}
+
+        # cors
+        CORS_ALLOW_ORIGIN: ${self:custom.cors.ALLOW_ORIGIN}
+        CORS_ALLOW_HEADERS: ${self:custom.cors.ALLOW_HEADERS}
+        CORS_ALLOW_METHODS: ${self:custom.cors.ALLOW_METHODS}
+    iam:
+        role:
+            statements:
+                - Effect: 'Allow'
+                  Action:
+                      - 'lambda:InvokeFunction'
+                  Resource:
+                      - Fn::Join:
+                            - ':'
+                            - - arn:aws:lambda
+                              - Ref: AWS::Region
+                              - Ref: AWS::AccountId
+                              - function:${self:service}-${opt:stage, self:provider.stage}-*
+                - Effect: 'Allow'
+                  Action:
+                      - 'secretsmanager:GetSecretValue'
+                  Resource:
+                      - Fn::Join:
+                            - ':'
+                            - - arn:aws:secretsmanager
+                              - Ref: AWS::Region
+                              - Ref: AWS::AccountId
+                              - secret:${self:custom.environment.TOKEN_SECRET_ID}-*
+
+functions:
+    authVerify:
+        handler: src/adapter/authentication/entities/jwt.verify
+
+    userPosition:
+        handler: src/adapter/apis/user-position.userPositionHandler
+        events:
+            - http:
+                  path: /triangle/classification
+                  method: POST
+                  cors: true
+                  authorizer:
+                      name: authVerify
+                      resultTtlInSeconds: 0
+resources:
+    Resources:
+        UserPositionTable:
+            Type: AWS::DynamoDB::Table
+            Properties:
+                TableName: ${self:custom.database.triangleHistory}
+                StreamSpecification:
+                    StreamViewType: NEW_AND_OLD_IMAGES
+                AttributeDefinitions:
+                    - AttributeName: userId
+                      AttributeType: S
+                    - AttributeName: date
+                      AttributeType: S
+                KeySchema:
+                    - AttributeName: userId
+                      KeyType: HASH
+                    - AttributeName: date
+                      KeyType: RANGE
+        UserPositionAPI:
+            Type: AWS::ApiGateway::RestApi
+            Properties:
+                Name: ${self:service}-${opt:stage, 'local'}
+
+        DynamoDBIamPolicy:
+            Type: AWS::IAM::Policy
+            DependsOn:
+                - UserPositionTable
+            Properties:
+                PolicyName: ${self:custom.database.triangleHistory}-dynamodb
+                PolicyDocument:
+                    Version: '2012-10-17'
+                    Statement:
+                        - Effect: Allow
+                          Action:
+                              - dynamodb:DescribeTable
+                              - dynamodb:GetItem
+                              - dynamodb:PutItem
+                              - dynamodb:UpdateItem
+                              - dynamodb:DeleteItem
+                              - dynamodb:Scan
+                              - dynamodb:Query
+                              - dynamodb:ListStreams
+                              - dynamodb:DescribeStream
+                          Resource:
+                              - arn:aws:dynamodb:*:*:table/${self:custom.database.triangleHistory}
+                              - arn:aws:dynamodb:*:*:table/${self:custom.database.triangleHistory}/index/*
+                Roles:
+                    - Ref: IamRoleLambdaExecution
+
+plugins:
+    - serverless-plugin-typescript
+    - serverless-offline
