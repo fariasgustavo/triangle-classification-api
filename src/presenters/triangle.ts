@@ -5,11 +5,13 @@ import TriangleHistoryModel from '../infra/data/models/trinagle-history.model';
 import TriangleHistory from '../domain/entities/triangle-history.entity';
 import triangleType from '../domain/use-cases/triangle-type';
 import Triangle from '../domain/entities/triangle.entity';
+import TriangleType from '../domain/entities/triangle-type.entity';
 
 export const classification = async (
   event: APIGatewayProxyEvent
 ): Promise<APIGatewayProxyResult> => {
-  console.info(currentDateToString());
+  console.info('event: ', event);
+
   try {
     const { body } = event;
 
@@ -24,7 +26,7 @@ export const classification = async (
     );
 
     const triangle: Triangle = JSON.parse(body);
-    const triangleTypeClassification = triangleType(triangle);
+    const triangleTypeClassification: TriangleType = triangleType(triangle);
 
     const newTriangleHistory: TriangleHistory = {
       triangle: body,
@@ -36,7 +38,12 @@ export const classification = async (
     await triangleHistoryRepository.create(newTriangleHistory);
 
     return {
-      body: JSON.stringify([{ message: currentDateToString() }]),
+      body: JSON.stringify([
+        {
+          message: 'Triangle Classification has been stored!',
+          triangleHistory: newTriangleHistory,
+        },
+      ]),
       statusCode: 200,
     };
   } catch (error) {

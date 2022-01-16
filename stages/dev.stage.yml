@@ -1,0 +1,12 @@
+region: us-east-1
+
+cors:
+  ALLOW_ORIGIN: '*'
+  ALLOW_HEADERS: 'GET, POST, PUT, PATCH, DELETE, OPTIONS'
+  ALLOW_METHODS: 'Content-Type, Authorization, X-SessionID'
+
+environment:
+  TOKEN_SECRET_ID: jwt-token
+
+database:
+  triangleHistory: triangle-classification-api-dev
