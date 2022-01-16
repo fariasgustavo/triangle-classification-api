@@ -38,7 +38,12 @@ export const classification = async (
     await triangleHistoryRepository.create(newTriangleHistory);
 
     return {
-      body: JSON.stringify([{ message: 'Triangle Classification has been stored!', triangleHistory: newTriangleHistory }]),
+      body: JSON.stringify([
+        {
+          message: 'Triangle Classification has been stored!',
+          triangleHistory: newTriangleHistory,
+        },
+      ]),
       statusCode: 200,
     };
   } catch (error) {
@@ -50,11 +55,3 @@ export const classification = async (
     };
   }
 };
-
-export const history = (event: APIGatewayProxyEvent): Promise<APIGatewayProxyResult> => {
-  try {
-
-  } catch(error) {
-    
-  }
-}

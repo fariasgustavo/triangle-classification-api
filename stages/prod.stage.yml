@@ -6,7 +6,7 @@ cors:
   ALLOW_METHODS: 'Content-Type, Authorization, X-SessionID'
 
 environment:
-  TOKEN_SECRET_ID: toroiac-secrets-webapi-token-hml
+  TOKEN_SECRET_ID: jwt-token
 
 database:
-  triangleHistory: toro-user-position-api-dev
+  triangleHistory: triangle-classification-api-prod
