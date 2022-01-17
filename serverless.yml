@@ -2,6 +2,9 @@ service: triangle-classification-api
 frameworkVersion: '>=2.33.1'
 custom: ${file(stages.yml):${opt:stage, self:provider.stage}}
 
+package:
+  excludeDevDependencies: true
+
 provider:
   name: aws
   runtime: nodejs14.x
@@ -42,38 +45,40 @@ provider:
                   - secret:${self:custom.environment.TOKEN_SECRET_ID}-*
 
 functions:
-  authVerify:
-    handler: src/infra/auth/auth-service.verify
-
   triangleClassification:
-    handler: src/presenters/triangle.classification
+    handler: src/presenters/controllers/triangle.classification
     events:
       - http:
           path: /triangle/classification
           method: POST
           cors: true
-          authorizer:
-            name: authVerify
-            resultTtlInSeconds: 0
+  triangleHistory:
+    handler: src/presenters/controllers/triangle.history
+    events:
+      - http:
+          path: /triangle/history
+          method: GET
+          cors: true
 resources:
   Resources:
-    UserPositionTable:
+    TriangleClassificationTable:
       Type: AWS::DynamoDB::Table
       Properties:
         TableName: ${self:custom.database.triangleHistory}
         StreamSpecification:
           StreamViewType: NEW_AND_OLD_IMAGES
         AttributeDefinitions:
-          - AttributeName: userId
+          - AttributeName: classification
             AttributeType: S
           - AttributeName: date
-            AttributeType: S
+            AttributeType: N
         KeySchema:
-          - AttributeName: userId
-            KeyType: HASH
           - AttributeName: date
+            KeyType: HASH
+          - AttributeName: classification
             KeyType: RANGE
-    UserPositionAPI:
+        BillingMode: 'PAY_PER_REQUEST'
+    TriangleClassificationAPI:
       Type: AWS::ApiGateway::RestApi
       Properties:
         Name: ${self:service}-${opt:stage, 'local'}
@@ -81,7 +86,7 @@ resources:
     DynamoDBIamPolicy:
       Type: AWS::IAM::Policy
       DependsOn:
-        - UserPositionTable
+        - TriangleClassificationTable
       Properties:
         PolicyName: ${self:custom.database.triangleHistory}-dynamodb
         PolicyDocument:

@@ -3,18 +3,12 @@ import DatabaseConnectionImp from '../../database/database-connection-imp';
 const database = new DatabaseConnectionImp();
 const dynamoDb = database.connection();
 
-const tableName = 'triangle-classification-historic';
+const tableName: string = process.env.TRIANGLE_CLASSIFICATION_TABLE || '';
 
 const TriangleHistorySchema = new dynamoDb.Schema(
   {
-    userId: {
-      type: String,
-      hashKey: true,
-      required: true,
-    },
     date: {
-      type: String,
-      rangeKey: true,
+      type: Number,
       required: true,
     },
     classification: {

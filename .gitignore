@@ -1,17 +1,13 @@
 # compiled output
 /node_modules
 /build
+/.build
+/.serverless
 
 # OS
 .DS_Store
 
 # Tests
 /coverage
-/.nyc_output
-
 
 .env
-
-# CDK asset staging directory
-.cdk.staging
-cdk.out

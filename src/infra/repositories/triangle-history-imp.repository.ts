@@ -9,12 +9,15 @@ export default class TriangleHistoryRepositoryImp
     private readonly triangleHistoryModel: typeof TriangleHistoryModel
   ) {}
 
-  findAll(): Promise<TriangleHistory> {
-    return this.triangleHistoryModel.scan().all().exec();
-  }
+  async findAll(): Promise<TriangleHistory[]> {
+    const allRecords: TriangleHistory[] = await this.triangleHistoryModel
+      .scan()
+      .all()
+      .exec();
 
-  findByUser(userId: string): Promise<TriangleHistory> {
-    return this.triangleHistoryModel.query('userId').eq(userId).all().exec();
+    return allRecords.sort((a: TriangleHistory, b: TriangleHistory) => {
+      return a.date - b.date;
+    });
   }
 
   async create(triangleHistory: TriangleHistory): Promise<void> {

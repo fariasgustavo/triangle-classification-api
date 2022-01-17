@@ -5,11 +5,10 @@
   "main": "./src/index.ts",
   "scripts": {
     "start:dev": "npx sls offline start --stage local --host 0.0.0.0 --useChildProcesses",
-    "build": "npx rimraf build && tsc",
+    "build": "npx rimraf build && npx tsc",
     "test": "npx jest",
     "test:coverage": "npx jest --coverage",
     "deploy:dev": "npx serverless deploy --stage dev",
-    "deploy:hml": "npx serverless deploy --stage hml",
     "deploy:prd": "npx serverless deploy --stage prd"
   },
   "keywords": [
@@ -22,14 +21,10 @@
   "author": "Gustavo Farias",
   "license": "ISC",
   "dependencies": {
-    "@aws-cdk/aws-dynamodb": "^1.138.2",
-    "aws-cdk-lib": "2.5.0",
     "aws-lambda": "^1.0.7",
-    "constructs": "^10.0.0",
     "dotenv": "^10.0.0",
     "dynamoose": "^2.8.3",
-    "jsonwebtoken": "^8.5.1",
-    "source-map-support": "^0.5.16"
+    "jsonwebtoken": "^8.5.1"
   },
   "devDependencies": {
     "@types/aws-lambda": "^8.10.89",
