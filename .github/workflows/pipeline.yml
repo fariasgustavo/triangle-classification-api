@@ -15,10 +15,10 @@ jobs:
 
       - name: Run Unit Tests
         run: npm run test
-  deploy-aws-cdk:
+  deploy-serverless:
     runs-on: ubuntu-latest
     steps:
-      - run: echo "Starting AWS CDK deploy"
+      - run: echo "Starting AWS Serverless Deploy"
       - name: Check out repository code
         uses: actions/checkout@v2
 
@@ -34,20 +34,5 @@ jobs:
 
       - name: Install Dependencies
         run: npm install
-
-      - name: Install AWS CDK
-        run: sudo npm install -g aws-cdk
-
-      - name: Code Build
-        run: npm run build
-
-      - name: CDK Synth
-        run: cdk synth
-
-      - name: CDK Bootstrap
-        run: cdk bootstrap aws://${{ secrets.AWS_ACCOUNT_NUMBER }}/${{ secrets.AWS_REGION }}
-
-      - name: CDK Deploy
-        run: cdk deploy
 
     needs: unit-tests

@@ -10,7 +10,7 @@ export interface TokenAuthentication {
   decodeToken(token: string): JWTToken;
 }
 
-export default class AuthService implements TokenAuthentication {
+export default class JWTService implements TokenAuthentication {
   constructor(private secret: TokenSecret) {}
 
   generateToken(sub: string): string {

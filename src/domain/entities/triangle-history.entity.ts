@@ -1,6 +1,5 @@
 export default interface TriangleHistory {
-  readonly date: string;
-  readonly userId: string;
+  readonly date: number;
   readonly classification: string;
   readonly triangle: string;
 }

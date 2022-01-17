@@ -1,0 +1,3 @@
+dev: ${file(stages/dev.stage.yml)}
+prod: ${file(stages/prod.stage.yml)}
+local: ${file(stages/local.stage.yml)}
